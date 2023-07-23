@@ -106,3 +106,40 @@ async def guessEmotion(file: UploadFile = File(...)):
         return {"overall_emotion": emotion_list[emo_in], "stress_level": getStress(yhat1, yhat1.shape[0])}
     else:
         return ({"model_loaded": False, "error": "Model file not found"})
+
+data_arr = ["saying-hello-baby-with-natural-deep-voice.mp3", "barbie-girl-official-music-video.mp3", "barbie-girl-official-music-video.mp3"]
+
+@app.get("/guess_predicted_emotion")
+async def guessEmotion():
+    global data_arr
+    emotion_list = ['OAF_angry',
+                    'YAF_disgust',
+                    'YAF_happy',
+                    'YAF_neutral',
+                    'YAF_sad',
+                    'YAF_pleasant_surprised',
+                    'YAF_angry',
+                    'OAF_happy',
+                    'OAF_Fear',
+                    'YAF_fear',
+                    'OAF_disgust',
+                    'OAF_Pleasant_surprise',
+                    'OAF_neutral',
+                    'OAF_Sad']
+    mp3 = data_arr[0]
+    wav = load_mp3_16k_mono(mp3)
+    audio_slices = tf.keras.utils.timeseries_dataset_from_array(
+        wav, wav, sequence_length=30000, sequence_stride=30000, batch_size=1)
+    audio_slices = audio_slices.map(preprocess_mp3)
+    audio_slices = audio_slices.batch(64)
+    if os.path.isfile(model_path):
+        new_model = load_model(model_path)
+        yhat1 = new_model.predict(audio_slices)
+        yhat = np.argmax(yhat1, axis=1)
+        emo_in = statistics.mode(yhat)
+        data_arr = data_arr[1:]
+        print("overall_emotion : ", emotion_list[emo_in], " | stress_level : ", getStress(yhat1, yhat1.shape[0]))
+        return {"overall_emotion": emotion_list[emo_in], "stress_level": getStress(yhat1, yhat1.shape[0])}
+    else:
+        data_arr = data_arr[1:]
+        return ({"model_loaded": False, "error": "Model file not found"})
