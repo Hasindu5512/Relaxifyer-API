@@ -107,7 +107,15 @@ async def guessEmotion(file: UploadFile = File(...)):
     else:
         return ({"model_loaded": False, "error": "Model file not found"})
 
-data_arr = ["saying-hello-baby-with-natural-deep-voice.mp3", "barbie-girl-official-music-video.mp3", "barbie-girl-official-music-video.mp3"]
+
+
+
+
+data_arr = ["YAF_fall_sad.mp3", 
+            "saying-hello-baby-with-natural-deep-voice.mp3",
+              "hello-stressed-girl-voice-shorts.mp3", 
+              "YAF_fall_sad.mp3", 
+              "saying-hello-baby-with-natural-deep-voice.mp3"]
 
 @app.get("/guess_predicted_emotion")
 async def guessEmotion():
