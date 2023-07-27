@@ -111,7 +111,8 @@ async def guessEmotion(file: UploadFile = File(...)):
 
 
 
-data_arr = ["YAF_fall_sad.mp3", 
+
+data_arr = ["saying-hello-baby-with-natural-deep-voice.mp3", 
             "saying-hello-baby-with-natural-deep-voice.mp3",
               "hello-stressed-girl-voice-shorts.mp3", 
               "YAF_fall_sad.mp3", 
